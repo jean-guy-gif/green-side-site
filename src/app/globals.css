@@ -1,26 +1,418 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* ──────────────────────────────────────────────────────────────────────────
+   DESIGN TOKENS — Agence Green Side
+   Palette et typographies PROVISOIRES (brief §4) : tout se règle ici.
+   Changer une valeur met à jour l'ensemble du site.
+   ────────────────────────────────────────────────────────────────────────── */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Fonds */
+  --color-ivoire: #f6f3ed; /* fond principal */
+  --color-ivoire-2: #eee9df; /* fond de section alterné */
+  --color-craie: #fbfaf6; /* cartes, champs */
+
+  /* Verts */
+  --color-foret: #35584b; /* vert profond : boutons, titres d'accent */
+  --color-foret-2: #2a473c; /* survol */
+  --color-nuit: #1f342c; /* sections sombres, pied de page */
+  --color-sauge: #b4beae;
+  --color-sauge-2: #dce1d6;
+
+  /* Accents chauds */
+  --color-rose: #c6adaa; /* rose terre : aplats uniquement */
+  --color-rose-2: #ece1dd;
+  --color-ocre: #b5873f; /* doré adouci du logo : filets, décor */
+  --color-ocre-texte: #7a5820; /* même teinte, contraste AA pour du texte */
+
+  /* Texte */
+  --color-encre: #283831;
+  --color-encre-2: #55625b;
+
+  /* États */
+  --color-erreur: #9b2c1f;
+  --color-succes: #2a5a3c;
+
+  /* Typographies (chargées localement, voir src/app/layout.tsx) */
+  --font-display: var(--font-fraunces), "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Rayons */
+  --radius-carte: 1.25rem;
+  --radius-champ: 0.75rem;
+
+  /* Largeur de lecture */
+  --container-page: 76rem;
+  --container-texte: 42rem;
+
+  --ease-doux: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-ivoire);
+    color: var(--color-encre);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    text-rendering: optimizeLegibility;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 340;
+    font-variation-settings: "SOFT" 100, "WONK" 0;
+    letter-spacing: -0.015em;
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-foret);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  .sur-sombre :focus-visible {
+    outline-color: var(--color-ivoire);
+  }
+  ::selection {
+    background: var(--color-sauge);
+    color: var(--color-encre);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .page {
+    width: 100%;
+    max-width: var(--container-page);
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 4vw, 3rem);
+  }
+  .section {
+    padding-block: clamp(4rem, 9vw, 8rem);
+  }
+
+  /* Titres */
+  .titre-xl {
+    font-size: clamp(2.6rem, 6.4vw, 5.4rem);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+  }
+  .titre-l {
+    font-size: clamp(2.1rem, 4.4vw, 3.6rem);
+  }
+  .titre-m {
+    font-size: clamp(1.6rem, 2.6vw, 2.25rem);
+    line-height: 1.15;
+  }
+  .titre-s {
+    font-size: clamp(1.3rem, 1.8vw, 1.55rem);
+    line-height: 1.2;
+  }
+  .italique {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--color-foret);
+  }
+  .sur-sombre .italique {
+    color: var(--color-sauge);
+  }
+  .sourcil {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-ocre-texte);
+  }
+  .sur-sombre .sourcil {
+    color: var(--color-sauge-2);
+  }
+  .chapo {
+    font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+    line-height: 1.6;
+    color: var(--color-encre-2);
+  }
+  .sur-sombre .chapo {
+    color: var(--color-sauge-2);
+  }
+
+  /* Boutons — hauteur tactile ≥ 48 px */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 550;
+    font-size: 1rem;
+    line-height: 1.2;
+    border: 1.5px solid transparent;
+    transition:
+      background-color 0.2s var(--ease-doux),
+      color 0.2s var(--ease-doux),
+      border-color 0.2s var(--ease-doux),
+      transform 0.2s var(--ease-doux);
+  }
+  .btn:active {
+    transform: scale(0.98);
+  }
+  .btn-plein {
+    background: var(--color-foret);
+    color: var(--color-ivoire);
+  }
+  .btn-plein:hover {
+    background: var(--color-foret-2);
+  }
+  .btn-ligne {
+    border-color: var(--color-foret);
+    color: var(--color-foret);
+  }
+  .btn-ligne:hover {
+    background: var(--color-foret);
+    color: var(--color-ivoire);
+  }
+  .btn-clair {
+    background: var(--color-ivoire);
+    color: var(--color-nuit);
+  }
+  .btn-clair:hover {
+    background: var(--color-sauge-2);
+  }
+  .btn-ligne-clair {
+    border-color: var(--color-sauge);
+    color: var(--color-ivoire);
+  }
+  .btn-ligne-clair:hover {
+    background: var(--color-ivoire);
+    color: var(--color-nuit);
+  }
+  .btn[aria-disabled="true"],
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* Lien texte avec flèche */
+  .lien {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    font-weight: 550;
+    color: var(--color-foret);
+    text-decoration: underline;
+    text-decoration-color: var(--color-sauge);
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.35em;
+    transition: text-decoration-color 0.2s var(--ease-doux);
+  }
+  .lien:hover {
+    text-decoration-color: var(--color-foret);
+  }
+  .lien .fleche {
+    transition: transform 0.25s var(--ease-doux);
+  }
+  .lien:hover .fleche {
+    transform: translateX(4px);
+  }
+  .sur-sombre .lien {
+    color: var(--color-ivoire);
+    text-decoration-color: var(--color-foret);
+  }
+  .sur-sombre .lien:hover {
+    text-decoration-color: var(--color-sauge);
+  }
+
+  /* L'arche : motif signature (portraits, panneaux, emplacements photo) */
+  .arche {
+    border-radius: 999px 999px var(--radius-carte) var(--radius-carte);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* Texte courant des pages de lecture */
+  .prose-gs > * + * {
+    margin-top: 1.1em;
+  }
+  .prose-gs h2 {
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    margin-top: 2.2em;
+  }
+  .prose-gs h3 {
+    font-size: 1.25rem;
+    margin-top: 1.8em;
+  }
+  .prose-gs ul {
+    list-style: none;
+    padding: 0;
+  }
+  .prose-gs ul > li {
+    position: relative;
+    padding-left: 1.4rem;
+  }
+  .prose-gs ul > li + li {
+    margin-top: 0.5em;
+  }
+  .prose-gs ul > li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.72em;
+    width: 0.6rem;
+    height: 1.5px;
+    background: var(--color-ocre);
+  }
+  .prose-gs a {
+    color: var(--color-foret);
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  /* Marqueur « à compléter » : visible en mode prototype uniquement */
+  .a-completer {
+    display: inline-block;
+    padding: 0.05em 0.5em;
+    border: 1px dashed var(--color-ocre);
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--color-ocre) 10%, transparent);
+    color: var(--color-ocre-texte);
+    font-family: var(--font-sans);
+    font-size: 0.85em;
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+    line-height: 1.5;
+  }
+  .sur-sombre .a-completer {
+    color: #e9cf9d;
+    border-color: #e9cf9d;
+  }
+
+  /* Champs de formulaire */
+  .champ {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.7rem 0.95rem;
+    border: 1.5px solid var(--color-sauge);
+    border-radius: var(--radius-champ);
+    background: var(--color-craie);
+    color: var(--color-encre);
+    font: inherit;
+    transition: border-color 0.15s var(--ease-doux);
+  }
+  .champ:hover {
+    border-color: var(--color-encre-2);
+  }
+  .champ:focus-visible {
+    outline: 2px solid var(--color-foret);
+    outline-offset: 1px;
+    border-color: var(--color-foret);
+  }
+  .champ[aria-invalid="true"] {
+    border-color: var(--color-erreur);
+  }
+  select.champ {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%2335584B' stroke-width='1.8'%3E%3Cpath d='m1 1.5 5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+  }
+  .etiquette {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.92rem;
+    font-weight: 550;
+  }
+
+  /* Pastille de choix (radio stylé) */
+  .pastille {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.5rem 1.05rem;
+    border: 1.5px solid var(--color-sauge);
+    border-radius: 999px;
+    background: var(--color-craie);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition:
+      background-color 0.15s var(--ease-doux),
+      border-color 0.15s var(--ease-doux),
+      color 0.15s var(--ease-doux);
+  }
+  .pastille:hover {
+    border-color: var(--color-foret);
+  }
+  .pastille:has(input:checked) {
+    background: var(--color-foret);
+    border-color: var(--color-foret);
+    color: var(--color-ivoire);
+  }
+  .pastille:has(input:focus-visible) {
+    outline: 2px solid var(--color-foret);
+    outline-offset: 3px;
+  }
+}
+
+/* Apparition douce à l'arrivée dans la page (CSS seul, sans script) */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes monter {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .entree {
+    animation: monter 0.7s var(--ease-doux) both;
+  }
+  .entree-2 {
+    animation-delay: 0.12s;
+  }
+  .entree-3 {
+    animation-delay: 0.24s;
+  }
+  .entree-4 {
+    animation-delay: 0.36s;
+  }
+  /* Le « chemin » doré du logo, tracé une fois à l'arrivée (longueur du tracé ≈ 1 600) */
+  @keyframes tracer {
+    from {
+      stroke-dashoffset: 1600;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  .chemin-trace {
+    stroke-dasharray: 1600;
+    animation: tracer 2.4s 0.3s var(--ease-doux) both;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
