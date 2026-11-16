@@ -22,7 +22,7 @@ export function Entete() {
       )}
       <header className="sticky top-0 z-50 border-b border-sauge/40 bg-ivoire/90 backdrop-blur-md">
         <div className="page flex h-[4.75rem] items-center justify-between gap-6">
-          <Link href="/" className="shrink-0 rounded-lg" aria-label="Agence Green Side — accueil">
+          <Link href="/" className="shrink-0 rounded-lg">
             <Logo />
           </Link>
 

@@ -184,6 +184,7 @@ export function ExplorateurBiens({ biens }: { biens: Bien[] }) {
         </div>
       </div>
 
+      <h2 className="sr-only">Biens correspondant à votre recherche</h2>
       {resultats.length > 0 ? (
         <ul className="mt-8 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
           {resultats.map((b) => (
@@ -192,7 +193,7 @@ export function ExplorateurBiens({ biens }: { biens: Bien[] }) {
         </ul>
       ) : (
         <div className="mt-8 rounded-carte bg-ivoire-2 p-8 sm:p-12">
-          <h2 className="titre-m">Aucun bien ne correspond à ces critères pour le moment.</h2>
+          <p className="titre-m font-display">Aucun bien ne correspond à ces critères pour le moment.</p>
           <p className="mt-3 max-w-xl text-encre-2">
             Élargissez la recherche, ou confiez-nous vos critères : nous
             reviendrons vers vous dès qu’un bien correspond.

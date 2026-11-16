@@ -29,7 +29,7 @@ export function PiedDePage() {
     <footer className="sur-sombre bg-nuit text-sauge-2">
       <div className="page grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:py-20">
         <div>
-          <Link href="/" className="inline-block rounded-lg" aria-label="Agence Green Side — accueil">
+          <Link href="/" className="inline-block rounded-lg">
             <Logo clair taille="grand" />
           </Link>
           <p className="mt-6 max-w-xs font-display text-xl leading-snug text-ivoire italic">
